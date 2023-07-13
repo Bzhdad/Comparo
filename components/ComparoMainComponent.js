@@ -1,20 +1,20 @@
-import { View, StyleSheet,TextInput} from 'react-native';
+import { View, StyleSheet,TextInput, Text} from 'react-native';
 import React, { useState} from 'react';
 import StarComponent from './StarComponent';
 
-function ComparoMainComponent({clearMark, onSumFirstChange, onSumSecondChange})
+function ComparoMainComponent({clearMark, index, onSumFirstChange,  onSumSecondChange})
 {
     const [sumFirst, setSumFirst] = useState(1);
     const [sumSecond, setSumSecond] = useState(1);
     
     const handleSumFirstChange = (newSumFirst) => {
         setSumFirst(newSumFirst);
-        onSumFirstChange(newSumFirst);
+        onSumFirstChange(newSumFirst, index);
       };
 
       const handleSumSecondChange = (newSumSecond) => {
         setSumSecond(newSumSecond);
-        onSumSecondChange(newSumSecond);
+        onSumSecondChange(newSumSecond, index);
       };
 
     return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Animated, TouchableOpacity } from 'react-native';
+import {TextInput, StyleSheet, Animated } from 'react-native';
 
 function MainInputFields ({placeholder, setInputValue, opacityPoint, animationStarted, value})
 {

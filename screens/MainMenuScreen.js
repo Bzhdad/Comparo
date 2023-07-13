@@ -1,4 +1,4 @@
-import { View, StyleSheet, Animated, Easing, Dimensions} from 'react-native';
+import { View, StyleSheet, Animated, Easing, Dimensions, Text} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import React, {useEffect, useState } from 'react';
 
@@ -189,8 +189,6 @@ const shakeStyle = {transform: [{translateX: interpolatedShake}]}
 
     <Animated.View style = {[styles.backgroundBottom, {height:interpolatedBottomHeight}]}>
       <TotalCount />
-
-
     </Animated.View>
 
     
