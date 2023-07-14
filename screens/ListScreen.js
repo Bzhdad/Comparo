@@ -1,4 +1,4 @@
-import { View, ScrollView, StyleSheet, FlatList, Text } from "react-native";
+import { View, ScrollView, FlatList } from "react-native";
 import React, { useState, useEffect } from "react";
 import ComparoMainComponent from "../components/ComparoMainComponent";
 
@@ -8,41 +8,40 @@ import AddButton from "../components/AddButton";
 function ListScreen({ firstItem, secondItem, clearList, onFirstChange, onSecondChange}) {
   const [list, setList] = useState([1]);
 
-  const [sumFirst, setSumFirst] = useState([1,]);
-  const [sumSecond, setSumSecond] = useState([1,]);
+  const [sumFirst, setSumFirst] = useState([1]);
+  const [sumSecond, setSumSecond] = useState([1]);
 
   const [totalFirst, setTotalFirst] = useState(1);
   const [totalSecond, setTotalSecond] = useState(1);
 
   const handleSumFirstChange = (newSumFirst, index) => {
     setSumFirst((currentSumFirst) => {
-      currentSumFirst[index] = newSumFirst;
-      return currentSumFirst;
+      const updatedSumFirst = [...currentSumFirst];
+
+      updatedSumFirst[index] = newSumFirst;
+
+      return updatedSumFirst;
+
     });
-    for(var sum = 0, index =0; index < sumFirst.length; index++)
-    {
-      sum += sumFirst[index];
-    }
-    setTotalFirst(()=>sum);
-    onFirstChange(totalFirst);
-    
   };
+
+  useEffect(() => {
+    const sum = sumFirst.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    onFirstChange(sum);
+  }, [sumFirst]);
 
   const handleSumSecondChange = (newSumSecond,index) => {
     setSumSecond((currentSumSecond) => {
-      currentSumSecond[index] = newSumSecond;
-      return currentSumSecond;
-
+      const updatedSumFirst = [... currentSumSecond]
+      updatedSumFirst[index] = newSumSecond;
+      return updatedSumFirst;
     });
-    for(var sum = 0, index =0; index < sumSecond.length; index++)
-    {
-      sum += sumSecond[index];
-    }
-    setTotalSecond(()=>sum);
-    onSecondChange(totalSecond);
-
-
   };
+
+  useEffect(() => {
+    const sum = sumSecond.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    onSecondChange(sum);
+  }, [sumSecond]);
 
   function AddLine() {
     setList(currentList => [...currentList, 1]);
@@ -51,9 +50,7 @@ function ListScreen({ firstItem, secondItem, clearList, onFirstChange, onSecondC
   }
 
   useEffect(() => {
-    console.log({clearList});
     if (clearList) {
-      console.log('run')
       setList([1]);
         setSumFirst([1]);
         setSumSecond([1]);
