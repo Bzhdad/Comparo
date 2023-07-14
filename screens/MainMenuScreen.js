@@ -7,6 +7,7 @@ import MainInputFields from '../components/MainInputFiels';
 import ListScreen from './ListScreen';
 import TotalCount from '../components/TotalCount';
 
+
 function MainMenuScreen() {
   const [marginTop, setMarginTop] = useState(new Animated.Value(0));
   const [height, setHeight] = useState(new Animated.Value(0));
@@ -16,13 +17,26 @@ function MainMenuScreen() {
   const [shake, setShake] = useState(new Animated.Value(0));
 
   const [animationStarted, setAnimationStarted] = useState(false);
-  const [inputEmpty, setInputEmpty] = useState(true);
   const [clearList, setCleatList] = useState(true);
   const [point, setPoint] = useState(1);
   const [buttonText, setButtonText] = useState ('COMPARO');
 
   const [firstItem, setFirstItem] = useState('');
   const [secondItem, setSecondItem] = useState('');
+
+  const [totalFirst, setTotalFirst] = useState(1);
+  const [totalSecond, setTotalSecond] = useState(1);
+
+  const handleTotalFirst = (totalFirst) => {
+    setTotalFirst(totalFirst);
+    console.log({totalFirst});
+  
+  }
+
+  const handleTotalSecond = (totalSecond) => {
+    setTotalSecond(totalSecond);
+  }
+
 
   const screen = Dimensions.get('window');
   const screenHeight = screen.height;
@@ -168,11 +182,7 @@ const shakeStyle = {transform: [{translateX: interpolatedShake}]}
         </View>
         
         <Animated.View style={[shakeStyle,styles.mainButtonContainer, { marginTop: interpolatedMarginTop}]}> 
-            <MainButton 
-            onPress={startAnimation} 
-            inputEmpty ={inputEmpty}
-
-            >{buttonText}</MainButton>
+            <MainButton onPress={startAnimation}>{buttonText}</MainButton>
         </Animated.View>
 
     </Animated.View>
@@ -184,11 +194,13 @@ const shakeStyle = {transform: [{translateX: interpolatedShake}]}
       firstItem={firstItem}
       secondItem={secondItem}
       clearList = {clearList}
+      onFirstChange = {handleTotalFirst}
+      onSecondChange = {handleTotalSecond}
       />
     </Animated.View>
-
+    
     <Animated.View style = {[styles.backgroundBottom, {height:interpolatedBottomHeight}]}>
-      <TotalCount />
+      <TotalCount firstNumber={totalFirst} secondNumber = {totalSecond}/>
     </Animated.View>
 
     
@@ -233,6 +245,7 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'white',
     },
+
     backgroundBottom:
     {
         width: '100%',
@@ -242,5 +255,6 @@ const styles = StyleSheet.create({
         marginTop: '10%'
 
     },
+
   });
 

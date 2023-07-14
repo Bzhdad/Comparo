@@ -5,7 +5,7 @@ import ComparoMainComponent from "../components/ComparoMainComponent";
 import ComparoName from "../components/ComparoName";
 import AddButton from "../components/AddButton";
 
-function ListScreen({ firstItem, secondItem, clearList}) {
+function ListScreen({ firstItem, secondItem, clearList, onFirstChange, onSecondChange}) {
   const [list, setList] = useState([1]);
 
   const [sumFirst, setSumFirst] = useState([1,]);
@@ -23,10 +23,8 @@ function ListScreen({ firstItem, secondItem, clearList}) {
     {
       sum += sumFirst[index];
     }
-    console.log({sum});
     setTotalFirst(()=>sum);
-      console.log({sumFirst});
-      console.log({totalFirst});
+    onFirstChange(totalFirst);
     
   };
 
@@ -36,6 +34,13 @@ function ListScreen({ firstItem, secondItem, clearList}) {
       return currentSumSecond;
 
     });
+    for(var sum = 0, index =0; index < sumSecond.length; index++)
+    {
+      sum += sumSecond[index];
+    }
+    setTotalSecond(()=>sum);
+    onSecondChange(totalSecond);
+
 
   };
 
@@ -46,13 +51,17 @@ function ListScreen({ firstItem, secondItem, clearList}) {
   }
 
   useEffect(() => {
+    console.log({clearList});
     if (clearList) {
-      setTimeout(() => {
-        setList([1,]);
-      }, 1000);
-      clearTimeout;
-      setSumFirst([1,])
-      setSumSecond([1,])
+      console.log('run')
+      setList([1]);
+        setSumFirst([1]);
+        setSumSecond([1]);
+        setTotalFirst(1);
+        setTotalSecond(1);
+        onFirstChange(totalFirst);
+        onSecondChange(totalSecond);
+      
     }
   }, [clearList]);
 
@@ -72,7 +81,6 @@ function ListScreen({ firstItem, secondItem, clearList}) {
             return (
               <View key={item.index}>
                 <ComparoMainComponent
-                  clearMark={clearList}
                   index = {item.index}
                   onSumFirstChange = {handleSumFirstChange}
                   onSumSecondChange = {handleSumSecondChange}
@@ -85,6 +93,8 @@ function ListScreen({ firstItem, secondItem, clearList}) {
           <AddButton onPress={AddLine} />
         </View>
       </ScrollView>
+
+      
     </View>
   );
 }
