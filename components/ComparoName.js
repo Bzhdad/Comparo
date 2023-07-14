@@ -25,7 +25,7 @@ const styles = StyleSheet.create ({
         marginRight:'2%',
         marginTop: '2%',
         borderRadius: 10,
-        alignItems: 'center'
+        alignItems: 'center',
     },
 
     text:
@@ -38,7 +38,8 @@ const styles = StyleSheet.create ({
     rootContainer:
     {
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        height: 30
     }
 
 });

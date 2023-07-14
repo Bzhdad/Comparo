@@ -1,5 +1,4 @@
-import {View, Text, Pressable, StyleSheet, Animated, Easing} from 'react-native';
-import React, { useState, useEffect } from 'react';
+import {Text, Pressable, StyleSheet, Animated} from 'react-native';
 
 function MainButton ({onPress, children, style})
 {
