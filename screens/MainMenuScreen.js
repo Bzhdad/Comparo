@@ -1,4 +1,4 @@
-import { View, StyleSheet, Animated, Easing, Dimensions, Text} from 'react-native';
+import { View, StyleSheet, Animated, Easing, Dimensions} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import React, {useEffect, useState } from 'react';
 
@@ -26,13 +26,10 @@ function MainMenuScreen() {
 
   const [totalFirst, setTotalFirst] = useState(1);
   const [totalSecond, setTotalSecond] = useState(1);
-
   const handleTotalFirst = (totalFirst) => {
-    setTotalFirst(totalFirst);
-    console.log({totalFirst});
-  
-  }
+    setTotalFirst(()=>totalFirst);
 
+  }
   const handleTotalSecond = (totalSecond) => {
     setTotalSecond(totalSecond);
   }
@@ -240,21 +237,17 @@ const styles = StyleSheet.create({
       width: '100%',
       backgroundColor: 'black',
     },
-    backgroundList:
-    {
+    backgroundList: {
         width: '100%',
         backgroundColor: 'white',
     },
 
-    backgroundBottom:
-    {
+    backgroundBottom: {
         width: '100%',
         backgroundColor: 'black',
         borderTopRightRadius: 15,
         borderTopLeftRadius: 15,
-        marginTop: '10%'
-
+        marginTop: '0%'
     },
-
   });
 

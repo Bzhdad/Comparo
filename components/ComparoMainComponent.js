@@ -1,6 +1,6 @@
-import { View, StyleSheet,TextInput, Text} from 'react-native';
+import { View, StyleSheet,TextInput} from 'react-native';
 import React, { useState} from 'react';
-import StarComponent from './StarComponent';
+import Rating from './Rating';
 
 function ComparoMainComponent({clearMark, index, onSumFirstChange,  onSumSecondChange})
 {
@@ -36,9 +36,9 @@ function ComparoMainComponent({clearMark, index, onSumFirstChange,  onSumSecondC
                 </View>
             </View>
 
-            <StarComponent starName={"staro"} clearMark = {clearMark} onSumChange = {handleSumFirstChange}/> 
+            <Rating starName={"staro"} clearMark={clearMark} onSumChange = {handleSumFirstChange}/>
                 
-            <StarComponent starName={"staro"} clearMark = {clearMark} onSumChange = {handleSumSecondChange}/> 
+            <Rating starName={"staro"} clearMark ={clearMark} onSumChange = {handleSumSecondChange}/>
         </View>
     );
 }

@@ -1,8 +1,6 @@
 import { View, StyleSheet, Text} from 'react-native';
 
-function TotalCount({firstNumber, secondNumber})
-{
-    
+function TotalCount({firstNumber, secondNumber}) {
     return (
         
  
