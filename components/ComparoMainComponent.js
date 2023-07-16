@@ -1,9 +1,34 @@
-import { View, StyleSheet,TextInput} from 'react-native';
-import React, { useState} from 'react';
+import {View, StyleSheet, TextInput, Text} from 'react-native';
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+    withRepeat,
+    withSequence,
+    withTiming,
+    Easing
+} from 'react-native-reanimated';
+import React, {useEffect, useState} from 'react';
 import Rating from './Rating';
+import AnimatedView from "react-native-reanimated/src/reanimated2/component/View";
 
 function ComparoMainComponent({clearMark, index, onSumFirstChange,  onSumSecondChange})
 {
+    //Анимация нового экрана
+    const mainComponentScale = useSharedValue(0.9);
+    const mainComponentOpacity=useSharedValue(0);
+    const reanimatedMainComponent = useAnimatedStyle(() => {
+        return {
+            transform: [{scale: mainComponentScale.value}],
+            opacity: mainComponentOpacity.value
+        };
+    }, []);
+    useEffect(() => {
+        mainComponentScale.value = withTiming(1, {duration: 500});
+        mainComponentOpacity.value = withTiming(1, {duration: 500});
+    }, []);
+
+
+
     const [sumFirst, setSumFirst] = useState(1);
     const [sumSecond, setSumSecond] = useState(1);
     
@@ -22,7 +47,7 @@ function ComparoMainComponent({clearMark, index, onSumFirstChange,  onSumSecondC
 
         
         
-        <View style = {styles.rootContainer}>
+        <AnimatedView style = {[styles.rootContainer, reanimatedMainComponent]}>
             <View style = {styles.inputContainer}>
                 <View style = {styles.textInputContainer}>
                     <TextInput 
@@ -39,7 +64,7 @@ function ComparoMainComponent({clearMark, index, onSumFirstChange,  onSumSecondC
             <Rating starName={"staro"} clearMark={clearMark} onSumChange = {handleSumFirstChange}/>
                 
             <Rating starName={"staro"} clearMark ={clearMark} onSumChange = {handleSumSecondChange}/>
-        </View>
+        </AnimatedView>
     );
 }
 
@@ -50,7 +75,7 @@ const styles = StyleSheet.create ({
     starContainer:
     {
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
 
     inputContainer:
