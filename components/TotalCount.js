@@ -1,18 +1,20 @@
 import { View, StyleSheet, Text} from 'react-native';
+import {sumOfFirstEntityRatingsSelector, sumOfSecondEntityRatingsSelector} from "../store/Rating/selectors";
+import {useSelector} from "react-redux";
+function TotalCount() {
+    const firstTotal = useSelector(sumOfFirstEntityRatingsSelector);
+    const secondTotal = useSelector(sumOfSecondEntityRatingsSelector);
 
-function TotalCount({firstNumber, secondNumber}) {
     return (
-        
- 
         <View style = {styles.rootContainer}>
             <View style = {styles.totalContainer}>
             <Text style ={styles.textStyle}>TOTAL</Text>
             </View>
             <View style = {styles.countContainer}>
-            <Text style ={styles.textStyle}>{firstNumber}</Text>
+            <Text style ={styles.textStyle}>{firstTotal}</Text>
             </View>
             <View style = {styles.countContainer}>
-            <Text style ={styles.textStyle}>{secondNumber}</Text>
+            <Text style ={styles.textStyle}>{secondTotal}</Text>
             </View>
 
         </View>
