@@ -1,17 +1,14 @@
-import {Text, Pressable, StyleSheet, Animated} from 'react-native';
+import {Text, Pressable, StyleSheet, View} from 'react-native';
+import AnimatedText from "react-native-reanimated/src/reanimated2/component/Text";
 
-function MainButton ({onPress, children, style})
+function MainButton ({onPress, children, textStyle})
 {
-
-    
-
-
 
     return (
         <Pressable onPress={onPress}>
-            <Animated.View style = {[styles.textContainer, style]}>
-                <Text style = {[styles.textStyle]}>{children}</Text>
-            </Animated.View>
+            <View style = {[styles.textContainer]}>
+                <AnimatedText style = {[styles.textStyle]}>{children}</AnimatedText>
+            </View>
         </Pressable>
     );
 }

@@ -1,45 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import {TextInput, StyleSheet, Animated } from 'react-native';
+import {TextInput, StyleSheet, View} from 'react-native';
 
-function MainInputFields ({placeholder, setInputValue, opacityPoint, animationStarted, value})
+function MainInputFields ({placeholder, setInputValue, value})
 {
-    const [opacity] = useState(new Animated.Value(0));
 
-
-    useEffect(() => {
-        if(animationStarted)
-        {
-            if(opacityPoint ===0)
-            {
-                setTimeout(() => {
-                    Animated.timing(opacity, {
-                        toValue: opacityPoint,
-                        duration: 400, 
-                        useNativeDriver: true,
-                      }).start();
-                  }, 700);
-            }
-            else
-            {
-                Animated.timing(opacity, {
-                    toValue: opacityPoint,
-                    duration: 200, 
-                    useNativeDriver: true,
-                  }).start();
-            }
-            
-            
-        }
-      }, [animationStarted]);
-
-      const interpolatedOpacity = opacity.interpolate({
-        inputRange: [0, 1],
-        outputRange: [1, 0],
-      });
 
     
     return (
-        <Animated.View style = {[styles.textInputContainer, {opacity: interpolatedOpacity}]}>
+        <View style = {[styles.textInputContainer]}>
             <TextInput 
             style = {[styles.textInput]} 
             placeholder={placeholder} 
@@ -51,7 +19,7 @@ function MainInputFields ({placeholder, setInputValue, opacityPoint, animationSt
             value ={value}
             
             />
-        </Animated.View>
+        </View>
     );
 }
 
