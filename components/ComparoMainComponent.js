@@ -1,52 +1,45 @@
-import {View, StyleSheet, TextInput, Text} from 'react-native';
-import Animated, {
+import {View, StyleSheet, TextInput} from 'react-native';
+import {
     useAnimatedStyle,
     useSharedValue,
-    withRepeat,
-    withSequence,
     withTiming,
-    Easing
 } from 'react-native-reanimated';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useCallback, memo} from 'react';
 import Rating from './Rating';
 import AnimatedView from "react-native-reanimated/src/reanimated2/component/View";
+import {setFirstEntityRating, setSecondEntityRating} from "../store/Rating/reducer";
+import {useDispatch} from "react-redux";
 
-function ComparoMainComponent({clearMark, index, onSumFirstChange,  onSumSecondChange})
-{
+const ComparoMainComponent = memo(function ComparoMainComponent({compareOption }) {
+    const dispatch = useDispatch();
+
     //Анимация нового экрана
     const mainComponentScale = useSharedValue(0.9);
-    const mainComponentOpacity=useSharedValue(0);
+    const mainComponentOpacity= useSharedValue(0);
+
     const reanimatedMainComponent = useAnimatedStyle(() => {
         return {
             transform: [{scale: mainComponentScale.value}],
             opacity: mainComponentOpacity.value
         };
     }, []);
+
+
     useEffect(() => {
         mainComponentScale.value = withTiming(1, {duration: 500});
         mainComponentOpacity.value = withTiming(1, {duration: 500});
     }, []);
 
+    const handleFirstRating = useCallback((value) => {
+        dispatch(setFirstEntityRating({ id: compareOption.id, rating: value }));
+    }, [compareOption.id, dispatch]);
 
-
-    const [sumFirst, setSumFirst] = useState(1);
-    const [sumSecond, setSumSecond] = useState(1);
-    
-    const handleSumFirstChange = (newSumFirst) => {
-        setSumFirst(newSumFirst);
-        onSumFirstChange(newSumFirst, index);
-      };
-
-      const handleSumSecondChange = (newSumSecond) => {
-        setSumSecond(newSumSecond);
-        onSumSecondChange(newSumSecond, index);
-      };
+    const handleSecondRating = useCallback((value) => {
+        dispatch(setSecondEntityRating({ id: compareOption.id, rating: value }));
+    }, [compareOption.id, dispatch]);
 
     return (
-        
 
-        
-        
         <AnimatedView style = {[styles.rootContainer, reanimatedMainComponent]}>
             <View style = {styles.inputContainer}>
                 <View style = {styles.textInputContainer}>
@@ -61,12 +54,11 @@ function ComparoMainComponent({clearMark, index, onSumFirstChange,  onSumSecondC
                 </View>
             </View>
 
-            <Rating starName={"staro"} clearMark={clearMark} onSumChange = {handleSumFirstChange}/>
-                
-            <Rating starName={"staro"} clearMark ={clearMark} onSumChange = {handleSumSecondChange}/>
+            <Rating setRating={handleFirstRating}/>
+            <Rating setRating={handleSecondRating}/>
         </AnimatedView>
     );
-}
+});
 
 export default ComparoMainComponent;
 
