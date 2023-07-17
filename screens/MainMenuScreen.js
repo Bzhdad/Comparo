@@ -18,7 +18,7 @@ import ListScreen from './ListScreen';
 import TotalCount from '../components/TotalCount';
 import AnimatedView from "react-native-reanimated/src/reanimated2/component/View";
 
-const screen = Dimensions.get('window');
+const screen = Dimensions.get('screen');
 const screenHeight = screen.height;
 const screenWidth = screen.width;
 
@@ -87,13 +87,13 @@ function MainMenuScreen() {
   function ScreenTranslateUp ()
   {
       translateScreen.value = withTiming(-screenHeight*0.9, {duration:1200});
-      screenBorder.value = withTiming(15,{duration:1200})
+      screenBorder.value = 15
       ButtonDown();
   }
   function ScreenTranslateDown()
   {
       translateScreen.value = withTiming(0, {duration:1200});
-      screenBorder.value = withTiming(0,{duration:1200})
+      screenBorder.value = 0
       ButtonUp();
   }
 
@@ -121,48 +121,46 @@ function MainMenuScreen() {
   return (
 
     <SafeAreaView style = {styles.safeArea}>
-    <View style = {styles.root}>
-        <StatusBar style="light" />
-
-    <View style = {styles.secondScreen}>
-        <View style = {[styles.backgroundList]}>
-        <ListScreen
-        firstItem={firstItem}
-        secondItem={secondItem}
-        clearList = {clearList}
-        />
-        </View>
-        <View style = {[styles.backgroundBottom]}>
-            <TotalCount/>
-        </View>
-
-    </View>
-        <AnimatedView
-r            style={[styles.backgroundTop, reanimatedStyleBackground]}>
-            <View style = {styles.textInputContainer}>
-                <View style = {styles.textInputContainerInner}>
-                    <MainInputFields
-                        placeholder={'FIRST ITEM'}
-                        setInputValue = {setFirstItem}
-                        value = {firstItem}
-                    />
+        <View style = {styles.root}>
+            <StatusBar style="light" />
+            <AnimatedView style={[styles.backgroundTop, reanimatedStyleBackground]}>
+                <View style = {styles.textInputContainer}>
+                    <View style = {styles.textInputContainerInner}>
+                        <MainInputFields
+                            placeholder={'FIRST ITEM'}
+                            setInputValue = {setFirstItem}
+                            value = {firstItem}
+                        />
+                    </View>
+                    <View style = {styles.textInputContainerInner}>
+                        <MainInputFields
+                            placeholder={'SECOND ITEM'}
+                            setInputValue = {setSecondItem}
+                            value = {secondItem}
+                        />
+                    </View>
                 </View>
-                <View style = {styles.textInputContainerInner}>
-                    <MainInputFields
-                        placeholder={'SECOND ITEM'}
-                        setInputValue = {setSecondItem}
-                        value = {secondItem}
-                    />
-                </View>
-            </View>
 
-            <AnimatedView style={[styles.mainButtonContainer, reanimatedButtonStyle]}>
-                <MainButton onPress={startAnimation}>{buttonText}</MainButton>
+                <AnimatedView style={[styles.mainButtonContainer, reanimatedButtonStyle]}>
+                    <MainButton onPress={startAnimation}>{buttonText}</MainButton>
+                </AnimatedView>
             </AnimatedView>
-        </AnimatedView>
-        
+                <View style = {styles.secondScreen}>
+                    <View style = {[styles.backgroundList]}>
+                    <ListScreen
+                    firstItem={firstItem}
+                    secondItem={secondItem}
+                    clearList = {clearList}
+                    />
+                    </View>
+                    <View style = {[styles.backgroundBottom]}>
+                        <TotalCount/>
+                    </View>
 
-    </View>
+                </View>
+
+
+        </View>
     </SafeAreaView>
   );
 }
@@ -170,9 +168,9 @@ r            style={[styles.backgroundTop, reanimatedStyleBackground]}>
 export default MainMenuScreen;
 
 const styles = StyleSheet.create({
-    safeArea:{
-        flex:1,
-        backgroundColor: 'black'
+    safeArea:{    flex:1,
+        backgroundColor: 'black',
+        marginTop: StatusBar.currentHeight
     },
 
     root:
@@ -197,14 +195,13 @@ const styles = StyleSheet.create({
     {
       width: '40%'
     },
-    backgroundTop:
-    {
-
+    backgroundTop: {
         width: screenWidth,
         height:screenHeight,
         backgroundColor: 'black',
         position:"absolute",
         alignSelf: 'center',
+        zIndex: 2
 
     },
 
