@@ -1,14 +1,11 @@
-import { View, StyleSheet, Text} from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { View, StyleSheet} from 'react-native';
+import React, { useState, memo } from 'react';
 import {Slider} from '@miblanchard/react-native-slider';
 import Star from "./Star";
 
 
-function Rating({clearMark, onSumChange}) {
 
-
-    const [value, setValue] = useState(1);
-
+const Rating = memo(function Rating({setRating}) {
     const [stars, setStars] = useState([
         {id: 1, value: 1, name: 'star', size: 21, color: 'black' },
         {id: 2, value: 2, name: 'staro', size: 21, color: 'black' },
@@ -17,18 +14,8 @@ function Rating({clearMark, onSumChange}) {
         {id: 5, value: 5, name: 'staro', size: 21, color: 'black' },
     ]);
 
-    const resetRating = () => {
-        const resetValues = stars.map((star)=> {
-            return {
-                ...star,
-                name: star.id === 1 ? 'star' : 'staro',
-            }
-        })
-        setStars(resetValues);
-        onSumChange(1)
-    }
-
     const setStarNames = (starCount) => {
+        // console.log(starCount)
         const updatedStars = stars.map((star) => {
             return {
                 ...star,
@@ -36,51 +23,30 @@ function Rating({clearMark, onSumChange}) {
             };
         });
         setStars(updatedStars);
-        onSumChange(starCount[0]);
-        setValue(starCount[0]);
+        setRating(starCount[0])
     };
-
-    useEffect (()=> {
-        if(clearMark) {
-            setTimeout(() => {
-                resetRating()
-            }, 1200);
-        }
-    }, [clearMark]);
-
-
-
 
     return (
         <View style={styles.rootContainer}>
             <View>
 
-
-        <View style = {styles.starContainer}>
-            {stars.map((star)=>(
-                <Star key={star.id} size={star.size} color={star.color} name={star.name} onPress={()=>setStarNames(star.value)}/>
-            ))}
-        </View>
-            <View style={styles.sliderContainer}>
-                <Slider
-                value={value}
-                minimumValue={1}
-                maximumValue={5}
-                step={1}
-                onValueChange={setStarNames}
-
-                />
-
-            </View>
+            <View style = {styles.starContainer}>
+                {stars.map((star)=>(
+                    <Star key={star.id} size={star.size} color={star.color} name={star.name} onPress={()=>setStarNames(star.value)}/>
+                ))}
+                </View>
+                    <View style={styles.sliderContainer}>
+                        <Slider
+                        minimumValue={1}
+                        maximumValue={5}
+                        step={1}
+                        onValueChange={setStarNames}
+                        />
+                </View>
             </View>
         </View>
-
-
-
     );
-
-
-}
+})
 
 export default Rating;
 
@@ -94,9 +60,7 @@ const styles = StyleSheet.create ({
         justifyContent: 'space-between',
         },
 
-    starContainer:
-    {
-
+    starContainer: {
         marginRight:'2%',
         alignItems: 'center',
         flexDirection: 'row',
@@ -115,10 +79,5 @@ const styles = StyleSheet.create ({
             alignSelf:'center',
             paddingHorizontal: 0,
             opacity: 0
-
-
-
         }
-
-
 });
