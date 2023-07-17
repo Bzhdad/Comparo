@@ -1,20 +1,28 @@
-import {View, ScrollView, FlatList, StyleSheet} from "react-native";
-import React, {useEffect} from "react";
-import  {
+import {View, ScrollView, FlatList, Text, StyleSheet} from "react-native";
+import React, { useState, useEffect } from "react";
+import Animated, {
     useAnimatedStyle,
     useSharedValue,
+    withRepeat,
+    withSequence,
     withTiming,
+    Easing
 } from 'react-native-reanimated';
-import {useDispatch, useSelector} from "react-redux";
-import {compareOptionsSelector} from '../store/Rating/selectors'
 import ComparoMainComponent from "../components/ComparoMainComponent";
+
 import ComparoName from "../components/ComparoName";
 import AddButton from "../components/AddButton";
-import {addCompareOption, removeCompareOption, clearOptions} from "../store/Rating/reducer";
+import AnimatedView from "react-native-reanimated/src/reanimated2/component/View";
+import AnimatedScrollView from "react-native-reanimated/src/reanimated2/component/ScrollView";
 
-function ListScreen({ firstItem, secondItem, clearList}) {
-  const dispatch = useDispatch();
-  const options = useSelector(compareOptionsSelector)
+function ListScreen({ firstItem, secondItem, clearList, onFirstChange, onSecondChange}) {
+  const [list, setList] = useState([1]);
+
+  const [sumFirst, setSumFirst] = useState([1]);
+  const [sumSecond, setSumSecond] = useState([1]);
+
+  const [totalFirst, setTotalFirst] = useState(1);
+  const [totalSecond, setTotalSecond] = useState(1);
 
         //Анимация кнопок
         const firstButtonPosition = useSharedValue(0);
@@ -45,16 +53,49 @@ function ListScreen({ firstItem, secondItem, clearList}) {
         }
 
 
+        const handleSumFirstChange = (newSumFirst, index) => {
+            setSumFirst((currentSumFirst) => {
+                const updatedSumFirst = [...currentSumFirst];
+
+                updatedSumFirst[index] = newSumFirst;
+
+                return updatedSumFirst;
+
+            });
+        };
+
+        useEffect(() => {
+            const sum = sumFirst.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+            onFirstChange(sum);
+        }, [sumFirst]);
+
+        const handleSumSecondChange = (newSumSecond, index) => {
+            setSumSecond((currentSumSecond) => {
+                const updatedSumFirst = [...currentSumSecond]
+                updatedSumFirst[index] = newSumSecond;
+                return updatedSumFirst;
+            });
+        };
+
+        useEffect(() => {
+            const sum = sumSecond.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+            onSecondChange(sum);
+        }, [sumSecond]);
+
         function AddLine() {
-            dispatch(addCompareOption())
-            if (options.length > 0 && firstButtonPosition.value !== 20) {
+            setList(currentList => [...currentList, 1]);
+            setSumFirst(currentList => [...currentList, 1])
+            setSumSecond(currentList => [...currentList, 1])
+            if (list.length > 0 && firstButtonPosition.value !== 20) {
                 OpenButtons();
             }
         }
 
         function DeleteLine() {
-            dispatch(removeCompareOption())
-            if (options.length < 3 && firstButtonPosition.value === 20) {
+            setList(currentList => currentList.slice(0, -1));
+            setSumFirst(currentList => currentList.slice(0, -1))
+            setSumSecond(currentList => currentList.slice(0, -1))
+            if (list.length < 3 && firstButtonPosition.value === 20) {
                 CloseButtons();
             }
 
@@ -63,7 +104,13 @@ function ListScreen({ firstItem, secondItem, clearList}) {
 
         useEffect(() => {
             if (clearList) {
-                dispatch(clearOptions());
+                setList([1]);
+                setSumFirst([1]);
+                setSumSecond([1]);
+                setTotalFirst(1);
+                setTotalSecond(1);
+                onFirstChange(totalFirst);
+                onSecondChange(totalSecond);
                 CloseButtons();
 
             }
@@ -79,14 +126,16 @@ function ListScreen({ firstItem, secondItem, clearList}) {
 
                     <FlatList
                         scrollEnabled={false}
-                        data={options}
+                        data={list}
                         alwaysBounceVertical={false}
                         alwaysBounceHorizontal={false}
                         renderItem={(item) => {
                             return (
                                 <View key={item.index}>
                                         <ComparoMainComponent
-                                            compareOption={item.item}
+                                            index={item.index}
+                                            onSumFirstChange={handleSumFirstChange}
+                                            onSumSecondChange={handleSumSecondChange}
                                         />
                                 </View>
                             );

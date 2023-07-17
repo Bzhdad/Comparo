@@ -1,8 +1,8 @@
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import React, {useState } from 'react';
-import {
+import React, {useEffect, useState } from 'react';
+import Animated, {
     useAnimatedStyle,
     useSharedValue,
     withRepeat,
@@ -31,7 +31,10 @@ function MainMenuScreen() {
 
   const [firstItem, setFirstItem] = useState('');
   const [secondItem, setSecondItem] = useState('');
-  
+
+  const [totalFirst, setTotalFirst] = useState(1);
+  const [totalSecond, setTotalSecond] = useState(1);
+
     //Анимация кнопки
     const buttonMarginTop = useSharedValue(screenHeight/2)
     const buttonShake = useSharedValue(0);
@@ -51,7 +54,8 @@ function MainMenuScreen() {
           setButtonText('TRY OTHER');
       }, 500);
   }
-  function ButtonUp() {
+  function ButtonUp()
+  {
       buttonMarginTop.value = withTiming(screenHeight/2, {duration:1200});
       textOpacity.value = withSequence(withTiming(0, {duration:500}), withTiming(1,{duration:500}));
       setTimeout(() => {
@@ -60,7 +64,8 @@ function MainMenuScreen() {
       setFirstItem('');
       setSecondItem('');
   }
-  function ButtonShake() {
+  function ButtonShake()
+  {
       buttonShake.value = withRepeat(withSequence(
           withTiming(15, {duration:80, easing:Easing.linear}),
           withTiming(0, {duration:80, easing:Easing.linear}),
@@ -70,6 +75,9 @@ function MainMenuScreen() {
   }
 
   //Анимация текста
+
+
+
 
 
 
@@ -97,21 +105,42 @@ function MainMenuScreen() {
       ButtonUp();
   }
 
+
+
+
+
+
+  const handleTotalFirst = (totalFirst) => {
+    setTotalFirst(()=>totalFirst);
+
+  }
+  const handleTotalSecond = (totalSecond) => {
+    setTotalSecond(totalSecond);
+  }
+
+
+
+
+
   function startAnimation() {
-    if (firstItem !== '' && secondItem !== '') {
+    if (firstItem !== '' && secondItem !== '')
+    {
       setAnimationStarted(true);
       if (point ===1){
         setCleatList(false);
         ScreenTranslateUp();
         setPoint(0);
       }
-      else {
+      else
+      {
+
           setCleatList(true);
           ScreenTranslateDown();
           setPoint(1);
       }
     }
-    else if (firstItem === '' || secondItem === '') {
+    else if (firstItem === '' || secondItem === '')
+    {
         ButtonShake();
     }
 
@@ -130,10 +159,12 @@ function MainMenuScreen() {
         firstItem={firstItem}
         secondItem={secondItem}
         clearList = {clearList}
+        onFirstChange = {handleTotalFirst}
+        onSecondChange = {handleTotalSecond}
         />
         </View>
         <View style = {[styles.backgroundBottom]}>
-            <TotalCount/>
+            <TotalCount firstNumber={totalFirst} secondNumber = {totalSecond}/>
         </View>
 
     </View>
@@ -160,7 +191,9 @@ r            style={[styles.backgroundTop, reanimatedStyleBackground]}>
                 <MainButton onPress={startAnimation}>{buttonText}</MainButton>
             </AnimatedView>
         </AnimatedView>
-        
+
+
+
 
     </View>
     </SafeAreaView>
