@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 
 const compareOptionsSelector = state => state.rating.compareOptions;
-
 const firstEntityRatingsSelector = createSelector(
     compareOptionsSelector,
     compareOptions => compareOptions.map(option => option.firstEntity.rating)
@@ -9,6 +8,10 @@ const firstEntityRatingsSelector = createSelector(
 const secondEntityRatingsSelector = createSelector(
     compareOptionsSelector,
     compareOptions => compareOptions.map(option => option.secondEntity.rating)
+);
+const closedSelector = createSelector(
+    compareOptionsSelector,
+    compareOptions => compareOptions.map(option => option.closed)
 );
 
 const sumOfFirstEntityRatingsSelector = createSelector(
@@ -22,5 +25,5 @@ const sumOfSecondEntityRatingsSelector = createSelector(
 );
 
 
-export {compareOptionsSelector, firstEntityRatingsSelector, secondEntityRatingsSelector,
+export {compareOptionsSelector, closedSelector, firstEntityRatingsSelector, secondEntityRatingsSelector,
     sumOfFirstEntityRatingsSelector, sumOfSecondEntityRatingsSelector};

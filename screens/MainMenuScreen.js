@@ -152,10 +152,11 @@ function MainMenuScreen() {
                     secondItem={secondItem}
                     clearList = {clearList}
                     />
+                        <View style = {[styles.backgroundBottom]}>
+                            <TotalCount/>
+                        </View>
                     </View>
-                    <View style = {[styles.backgroundBottom]}>
-                        <TotalCount/>
-                    </View>
+
 
                 </View>
 

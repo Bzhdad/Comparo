@@ -5,7 +5,8 @@ import {addCompareOption,
     setSecondEntityName,
     setFirstEntityRating,
     setSecondEntityRating,
-    clearOptions} from './reducer';
+    clearOptions,
+    closeOption} from './reducer';
 
 export {addCompareOption,
     removeCompareOption,
@@ -14,4 +15,5 @@ export {addCompareOption,
     setSecondEntityName,
     setFirstEntityRating,
     setSecondEntityRating,
-    clearOptions};
+    clearOptions,
+    closeOption};

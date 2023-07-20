@@ -10,17 +10,19 @@ import AnimatedView from "react-native-reanimated/src/reanimated2/component/View
 import {setFirstEntityRating, setSecondEntityRating} from "../store/Rating/reducer";
 import {useDispatch} from "react-redux";
 
-const ComparoMainComponent = memo(function ComparoMainComponent({compareOption }) {
+const ComparoMainComponent = memo(function ComparoMainComponent({compareOption, componentClosed}) {
     const dispatch = useDispatch();
 
     //Анимация нового экрана
     const mainComponentScale = useSharedValue(0.9);
     const mainComponentOpacity= useSharedValue(0);
+    const mainComponentHeight = useSharedValue(0);
 
     const reanimatedMainComponent = useAnimatedStyle(() => {
         return {
             transform: [{scale: mainComponentScale.value}],
-            opacity: mainComponentOpacity.value
+            opacity: mainComponentOpacity.value,
+            height: mainComponentHeight.value
         };
     }, []);
 
@@ -28,7 +30,20 @@ const ComparoMainComponent = memo(function ComparoMainComponent({compareOption }
     useEffect(() => {
         mainComponentScale.value = withTiming(1, {duration: 500});
         mainComponentOpacity.value = withTiming(1, {duration: 500});
+        mainComponentHeight.value = withTiming(45, {duration: 350});
+
     }, []);
+
+    useEffect(() => {
+        if (componentClosed === 1)
+        {
+            mainComponentScale.value = withTiming(0, {duration: 350});
+            mainComponentOpacity.value = withTiming(0, {duration: 350});
+            mainComponentHeight.value = withTiming(0, {duration: 350});
+        }
+    }, [componentClosed]);
+
+
 
     const handleFirstRating = useCallback((value) => {
         dispatch(setFirstEntityRating({ id: compareOption.id, rating: value }));
@@ -50,6 +65,7 @@ const ComparoMainComponent = memo(function ComparoMainComponent({compareOption }
                     autoCapitalize='characters'
                     maxLength={15}
                     textAlign = 'center'
+                    caretHidden = {true}
                     />
                 </View>
             </View>
@@ -92,8 +108,7 @@ const styles = StyleSheet.create ({
     rootContainer:
     {
         flexDirection: 'row',
-        justifyContent: 'flex-end',
-        height: 35,
+        justifyContent: 'flex-end'
 
     },
     textInputContainer:
@@ -107,6 +122,8 @@ const styles = StyleSheet.create ({
     {
         color: 'black',
         fontSize: 12,
+        width: '100%',
+        height: 32
 
     }
 
