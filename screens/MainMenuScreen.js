@@ -1,4 +1,4 @@
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {View, StyleSheet, Dimensions, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import React, {useState } from 'react';
@@ -124,6 +124,9 @@ function MainMenuScreen() {
         <View style = {styles.root}>
             <StatusBar style="light" />
             <AnimatedView style={[styles.backgroundTop, reanimatedStyleBackground]}>
+                <View style={styles.logoContainer}>
+                    <Image source={require('../assets/comparoIcon.png')} style={styles.logo}/>
+                </View>
                 <View style = {styles.textInputContainer}>
                     <View style = {styles.textInputContainerInner}>
                         <MainInputFields
@@ -225,6 +228,19 @@ const styles = StyleSheet.create({
         marginTop: '0%',
         alignItems:'flex-end',
     },
+
+    logo:
+        {
+            width: 100,
+            height: 100,
+            position: 'absolute',
+            marginTop: 50,
+            opacity: 0
+        },
+    logoContainer:
+        {
+            alignItems: 'center'
+        }
 
   });
 
