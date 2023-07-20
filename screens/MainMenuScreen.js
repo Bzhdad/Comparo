@@ -8,7 +8,7 @@ import {
     withRepeat,
     withSequence,
     withTiming,
-    Easing
+    Easing, withDelay
 } from 'react-native-reanimated';
 
 
@@ -53,10 +53,10 @@ function MainMenuScreen() {
   }
   function ButtonUp() {
       buttonMarginTop.value = withTiming(screenHeight/2, {duration:1200});
-      textOpacity.value = withSequence(withTiming(0, {duration:500}), withTiming(1,{duration:500}));
+      textOpacity.value = withSequence(withTiming(0, {duration:1100}), withTiming(1,{duration:300}));
       setTimeout(() => {
           setButtonText('COMPARO');
-      }, 500);
+      }, 1100);
       setFirstItem('');
       setSecondItem('');
   }
@@ -105,7 +105,7 @@ function MainMenuScreen() {
   function ScreenTranslateDown()
   {
       translateScreen.value = withTiming(0, {duration:1200});
-      screenBorder.value = 0
+      screenBorder.value = withDelay(1200, withTiming(0, {duration: 0}))
       ButtonUp();
   }
 
@@ -137,10 +137,7 @@ function MainMenuScreen() {
 
             <StatusBar style="light" />
             <AnimatedView style={[styles.backgroundTop, reanimatedStyleBackground]}>
-                <View style={styles.logoContainer}>
-                    <Image source={require('../assets/comparoIcon.png')} style={styles.logo}/>
-                </View>
-                <AnimatedView style = {[styles.textInputContainer, , reanimatedMainScreen]}>
+                <AnimatedView style = {[styles.textInputContainer,reanimatedMainScreen]}>
                     <View style = {styles.textInputContainerInner}>
                         <MainInputFields
                             placeholder={'FIRST ITEM'}
@@ -195,7 +192,7 @@ const styles = StyleSheet.create({
     root:
     {
         flex:1,
-        opacity: 1
+        backgroundColor: 'white'
     },
     mainButtonContainer:
     {
