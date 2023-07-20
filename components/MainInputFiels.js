@@ -17,6 +17,7 @@ function MainInputFields ({placeholder, setInputValue, value})
             textAlign = 'center'
             onChangeText={text => setInputValue(text)}
             value ={value}
+            caretHidden = {false}
             
             />
         </View>
@@ -37,6 +38,8 @@ const styles = StyleSheet.create ({
     {
         color: 'white',
         fontSize:12,
+        width: '100%',
+        height: 35
 
     }
 

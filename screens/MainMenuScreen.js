@@ -1,14 +1,14 @@
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {View, StyleSheet, Dimensions, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import React, {useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     useAnimatedStyle,
     useSharedValue,
     withRepeat,
     withSequence,
     withTiming,
-    Easing
+    Easing, withDelay
 } from 'react-native-reanimated';
 
 
@@ -53,10 +53,10 @@ function MainMenuScreen() {
   }
   function ButtonUp() {
       buttonMarginTop.value = withTiming(screenHeight/2, {duration:1200});
-      textOpacity.value = withSequence(withTiming(0, {duration:500}), withTiming(1,{duration:500}));
+      textOpacity.value = withSequence(withTiming(0, {duration:1100}), withTiming(1,{duration:300}));
       setTimeout(() => {
           setButtonText('COMPARO');
-      }, 500);
+      }, 1100);
       setFirstItem('');
       setSecondItem('');
   }
@@ -69,7 +69,19 @@ function MainMenuScreen() {
           2, true);
   }
 
-  //Анимация текста
+  //Анимация главного экрана при входе
+    const opacityMainScreen = useSharedValue(0);
+    const reanimatedMainScreen = useAnimatedStyle(()=> {
+        return {
+            opacity: opacityMainScreen.value
+
+        };
+    }, []);
+    useEffect(() => {
+        opacityMainScreen.value = withTiming(1, {duration: 1000})
+
+    }, []);
+
 
 
 
@@ -93,7 +105,7 @@ function MainMenuScreen() {
   function ScreenTranslateDown()
   {
       translateScreen.value = withTiming(0, {duration:1200});
-      screenBorder.value = 0
+      screenBorder.value = withDelay(1200, withTiming(0, {duration: 0}))
       ButtonUp();
   }
 
@@ -120,11 +132,12 @@ function MainMenuScreen() {
 
   return (
 
-    <SafeAreaView style = {styles.safeArea}>
-        <View style = {styles.root}>
+      <SafeAreaView style = {styles.safeArea}>
+      <View style = {[styles.root]}>
+
             <StatusBar style="light" />
             <AnimatedView style={[styles.backgroundTop, reanimatedStyleBackground]}>
-                <View style = {styles.textInputContainer}>
+                <AnimatedView style = {[styles.textInputContainer,reanimatedMainScreen]}>
                     <View style = {styles.textInputContainerInner}>
                         <MainInputFields
                             placeholder={'FIRST ITEM'}
@@ -139,9 +152,9 @@ function MainMenuScreen() {
                             value = {secondItem}
                         />
                     </View>
-                </View>
+                </AnimatedView>
 
-                <AnimatedView style={[styles.mainButtonContainer, reanimatedButtonStyle]}>
+                <AnimatedView style={[styles.mainButtonContainer, reanimatedMainScreen, reanimatedButtonStyle]}>
                     <MainButton onPress={startAnimation}>{buttonText}</MainButton>
                 </AnimatedView>
             </AnimatedView>
@@ -152,16 +165,19 @@ function MainMenuScreen() {
                     secondItem={secondItem}
                     clearList = {clearList}
                     />
+                        <View style = {[styles.backgroundBottom]}>
+                            <TotalCount/>
+                        </View>
                     </View>
-                    <View style = {[styles.backgroundBottom]}>
-                        <TotalCount/>
-                    </View>
+
 
                 </View>
 
 
-        </View>
-    </SafeAreaView>
+
+
+      </View>
+      </SafeAreaView>
   );
 }
 
@@ -176,7 +192,7 @@ const styles = StyleSheet.create({
     root:
     {
         flex:1,
-        backgroundColor:'white'
+        backgroundColor: 'white'
     },
     mainButtonContainer:
     {
@@ -224,6 +240,18 @@ const styles = StyleSheet.create({
         marginTop: '0%',
         alignItems:'flex-end',
     },
+
+    logo:
+        {
+            width: 200,
+            height: 200,
+            position: 'absolute',
+            opacity: 0
+        },
+    logoContainer:
+        {
+            alignItems: 'center'
+        }
 
   });
 

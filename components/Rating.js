@@ -19,31 +19,21 @@ const Rating = memo(function Rating({setRating}) {
         const updatedStars = stars.map((star) => {
             return {
                 ...star,
-                name: star.value <= starCount[0] ? 'star' : 'staro',
+                name: star.value <= starCount ? 'star' : 'staro',
             };
         });
         setStars(updatedStars);
-        setRating(starCount[0])
+        setRating(starCount);
     };
 
     return (
         <View style={styles.rootContainer}>
-            <View>
 
             <View style = {styles.starContainer}>
                 {stars.map((star)=>(
                     <Star key={star.id} size={star.size} color={star.color} name={star.name} onPress={()=>setStarNames(star.value)}/>
                 ))}
                 </View>
-                    <View style={styles.sliderContainer}>
-                        <Slider
-                        minimumValue={1}
-                        maximumValue={5}
-                        step={1}
-                        onValueChange={setStarNames}
-                        />
-                </View>
-            </View>
         </View>
     );
 })
@@ -65,19 +55,6 @@ const styles = StyleSheet.create ({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: 2
+        paddingHorizontal: 2,
     },
-
-    sliderContainer:
-        {
-            position: "absolute",
-            justifyContent: 'center',
-            borderWidth:1,
-            borderColor: 'red',
-            width: '100%',
-            height: '100%',
-            alignSelf:'center',
-            paddingHorizontal: 0,
-            opacity: 0
-        }
 });

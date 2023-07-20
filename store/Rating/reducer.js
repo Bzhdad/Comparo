@@ -10,6 +10,7 @@ const createSingleOption = () => ({
     secondEntity: {
         rating: 1,
     },
+    closed: 0
 });
 
 
@@ -60,6 +61,11 @@ const ratingSlice = createSlice({
         },
         clearOptions: (state, _)=> {
             state.compareOptions = [createSingleOption()];
+        },
+        closeOption: (state, action) => {
+            const lastOption = state.compareOptions.slice(-1)[0];
+            lastOption.closed = 1;
+            return state;
         }
     }
 })
@@ -73,5 +79,6 @@ export const {
     setFirstEntityRating,
     setSecondEntityRating,
     clearOptions,
+    closeOption
 } = ratingSlice.actions;
 export default ratingSlice.reducer;
