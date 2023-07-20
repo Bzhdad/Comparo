@@ -1,8 +1,8 @@
-import {View, ScrollView, FlatList, StyleSheet, Text} from "react-native";
+import {View, FlatList, StyleSheet} from "react-native";
 import React, {useEffect, useRef, useState} from "react";
 import {
     useAnimatedStyle,
-    useSharedValue, withSequence,
+    useSharedValue,
     withTiming,
 } from 'react-native-reanimated';
 import {useDispatch, useSelector} from "react-redux";
@@ -106,30 +106,28 @@ function ListScreen({ firstItem, secondItem, clearList}) {
         }, [clearList]);
 
         return (
+        <FlatList
+            ListHeaderComponent={Names}
+            ListFooterComponent={Buttons}
+            scrollEnabled={true}
+            data={options}
+            alwaysBounceVertical={false}
+            alwaysBounceHorizontal={false}
+            ref={(it) => (scrollRef.current = it)}
+            onContentSizeChange={() =>
+                scrollRef.current.scrollToEnd({animated: true})}
 
-            <FlatList
-                        ListHeaderComponent={Names}
-                        ListFooterComponent={Buttons}
-
-                        scrollEnabled={true}
-                        data={options}
-                        alwaysBounceVertical={false}
-                        alwaysBounceHorizontal={false}
-                        ref={(it) => (scrollRef.current = it)}
-                        onContentSizeChange={() =>
-                            scrollRef.current.scrollToEnd({animated: true})}
-
-                        renderItem={(item) => {
-                            return (
-                                <AnimatedView key={item.index}>
-                                        <ComparoMainComponent
-                                            compareOption={item.item}
-                                            componentClosed={closed[item.index]}
-                                        />
-                                </AnimatedView>
-                            );
-                        }}
-                    />
+            renderItem={(item) => {
+                return (
+                    <AnimatedView key={item.index}>
+                            <ComparoMainComponent
+                                compareOption={item.item}
+                                componentClosed={closed[item.index]}
+                            />
+                    </AnimatedView>
+                );
+            }}
+        />
         );
 
     }

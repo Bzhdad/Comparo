@@ -1,6 +1,5 @@
 import { View, StyleSheet} from 'react-native';
 import React, { useState, memo } from 'react';
-import {Slider} from '@miblanchard/react-native-slider';
 import Star from "./Star";
 
 
@@ -15,7 +14,6 @@ const Rating = memo(function Rating({setRating}) {
     ]);
 
     const setStarNames = (starCount) => {
-        // console.log(starCount)
         const updatedStars = stars.map((star) => {
             return {
                 ...star,

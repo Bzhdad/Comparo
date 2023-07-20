@@ -1,4 +1,4 @@
-import {View, StyleSheet, Dimensions, Image} from 'react-native';
+import {View, StyleSheet, Dimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import React, {useEffect, useState} from 'react';
@@ -18,22 +18,22 @@ import ListScreen from './ListScreen';
 import TotalCount from '../components/TotalCount';
 import AnimatedView from "react-native-reanimated/src/reanimated2/component/View";
 
-const screen = Dimensions.get('screen');
+const screen = Dimensions.get('window');
 const screenHeight = screen.height;
 const screenWidth = screen.width;
 
 function MainMenuScreen() {
-
   const [animationStarted, setAnimationStarted] = useState(false);
-  const [clearList, setCleatList] = useState(true);
+
+  const [clearList, setClearList] = useState(true);
   const [point, setPoint] = useState(1);
   const [buttonText, setButtonText] = useState ('COMPARO');
 
   const [firstItem, setFirstItem] = useState('');
   const [secondItem, setSecondItem] = useState('');
-  
+
     //Анимация кнопки
-    const buttonMarginTop = useSharedValue(screenHeight/2)
+    const buttonMarginTop = useSharedValue(screenHeight*0.04)
     const buttonShake = useSharedValue(0);
     const textOpacity = useSharedValue(1)
     const reanimatedButtonStyle = useAnimatedStyle(() => {
@@ -43,17 +43,20 @@ function MainMenuScreen() {
             opacity: textOpacity.value,
       };
   },[]);
-  function ButtonDown()
-  {
-      buttonMarginTop.value = withTiming(screenHeight*0.91, {duration:1200});
+
+
+  function ButtonDown() {
+      // buttonMarginTop.value = withTiming(screenHeight*0.91, {duration:1200});
       textOpacity.value = withSequence(withTiming(0, {duration:500}), withTiming(1,{duration:500}));
       setTimeout(() => {
           setButtonText('TRY OTHER');
       }, 500);
   }
+
+
   function ButtonUp() {
-      buttonMarginTop.value = withTiming(screenHeight/2, {duration:1200});
-      textOpacity.value = withSequence(withTiming(0, {duration:1100}), withTiming(1,{duration:300}));
+      // buttonMarginTop.value = withTiming(screenHeight/2, {duration:1200});
+      textOpacity.value = withSequence(withTiming(0, {duration:1100}), withDelay(50, withTiming(1, {duration:300})));
       setTimeout(() => {
           setButtonText('COMPARO');
       }, 1100);
@@ -86,11 +89,22 @@ function MainMenuScreen() {
 
 
   //Анимация экрана
-  const translateScreen = useSharedValue(0);
+  const translateScreen = useSharedValue(screenHeight);
   const screenBorder = useSharedValue(0);
+  const opacityInputsWrapperValue = useSharedValue(1);
+  const heightInputsWrapperValue = useSharedValue(50);
+  const marginInputsWrapperValue = useSharedValue( screenHeight*0.4);
+
+  const inputsWrapperTransition = useAnimatedStyle(()=> {
+    return {
+        opacity: opacityInputsWrapperValue.value,
+        height: heightInputsWrapperValue.value,
+        marginTop: marginInputsWrapperValue.value,
+    };
+})
   const reanimatedStyleBackground = useAnimatedStyle(()=> {
       return {
-          transform:[{translateY:translateScreen.value}],
+          height:translateScreen.value,
           borderBottomLeftRadius: screenBorder.value,
           borderBottomRightRadius: screenBorder.value,
 
@@ -98,27 +112,28 @@ function MainMenuScreen() {
   }, []);
   function ScreenTranslateUp ()
   {
-      translateScreen.value = withTiming(-screenHeight*0.9, {duration:1200});
+      translateScreen.value = withTiming(screenHeight * 0.1, {duration:1200});
       screenBorder.value = 15
       ButtonDown();
+      setInputsPosition(0, 0, 0);
   }
-  function ScreenTranslateDown()
-  {
-      translateScreen.value = withTiming(0, {duration:1200});
-      screenBorder.value = withDelay(1200, withTiming(0, {duration: 0}))
+  function ScreenTranslateDown() {
+      translateScreen.value = withTiming(screenHeight, {duration:1000});
+      screenBorder.value = withDelay(1000, withTiming(0, {duration: 0}))
       ButtonUp();
+      setInputsPosition(1, 50, screenHeight*0.4);
   }
 
   function startAnimation() {
     if (firstItem !== '' && secondItem !== '') {
       setAnimationStarted(true);
       if (point ===1){
-        setCleatList(false);
+          setClearList(false);
         ScreenTranslateUp();
         setPoint(0);
       }
       else {
-          setCleatList(true);
+          setClearList(true);
           ScreenTranslateDown();
           setPoint(1);
       }
@@ -126,18 +141,21 @@ function MainMenuScreen() {
     else if (firstItem === '' || secondItem === '') {
         ButtonShake();
     }
+  }
 
 
+  function setInputsPosition(opacity, height, margin) {
+      opacityInputsWrapperValue.value = withTiming(opacity, {duration: 1000});
+      heightInputsWrapperValue.value = withTiming(height, {duration: 1000});
+      marginInputsWrapperValue.value = withTiming(margin, {duration: 1000});
   }
 
   return (
-
-      <SafeAreaView style = {styles.safeArea}>
-      <View style = {[styles.root]}>
-
+    <SafeAreaView style = {styles.safeArea}>
+        <View style = {styles.root}>
             <StatusBar style="light" />
             <AnimatedView style={[styles.backgroundTop, reanimatedStyleBackground]}>
-                <AnimatedView style = {[styles.textInputContainer,reanimatedMainScreen]}>
+                <AnimatedView style = {[styles.textInputContainer, inputsWrapperTransition]}>
                     <View style = {styles.textInputContainerInner}>
                         <MainInputFields
                             placeholder={'FIRST ITEM'}
@@ -158,78 +176,69 @@ function MainMenuScreen() {
                     <MainButton onPress={startAnimation}>{buttonText}</MainButton>
                 </AnimatedView>
             </AnimatedView>
-                <View style = {styles.secondScreen}>
-                    <View style = {[styles.backgroundList]}>
+            <View style = {styles.secondScreen}>
+                <View style = {[styles.backgroundList]}>
                     <ListScreen
                     firstItem={firstItem}
                     secondItem={secondItem}
                     clearList = {clearList}
                     />
-                        <View style = {[styles.backgroundBottom]}>
-                            <TotalCount/>
-                        </View>
+                    <View style = {styles.backgroundBottom}>
+                        <TotalCount/>
                     </View>
-
-
                 </View>
-
-
-
-
-      </View>
-      </SafeAreaView>
+            </View>
+        </View>
+    </SafeAreaView>
   );
 }
 
 export default MainMenuScreen;
 
 const styles = StyleSheet.create({
-    safeArea:{    flex:1,
+    expandingElement: {
+        backgroundColor: 'blue',
+        width: '100%',
+    },
+    safeArea:{
+        flex:1,
         backgroundColor: 'black',
         marginTop: StatusBar.currentHeight
     },
 
-    root:
-    {
+    root: {
         flex:1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        justifyContent: 'space-between'
     },
-    mainButtonContainer:
-    {
-        position: 'absolute',
+    mainButtonContainer: {
+        marginTop: 215,
         alignSelf: 'center'
     },
-    textInputContainer:
-    {
-        marginTop: screenHeight*0.4,
+    textInputContainer: {
+        overflow: 'hidden',
         flexDirection: 'row',
         justifyContent: 'space-around'
-
-
     },
-    textInputContainerInner:
-    {
+    textInputContainerInner: {
       width: '40%'
     },
     backgroundTop: {
         width: screenWidth,
         height:screenHeight,
         backgroundColor: 'black',
-        position:"absolute",
+        position:"relative",
         alignSelf: 'center',
-        zIndex: 2
+        zIndex: 2,
 
     },
 
     secondScreen:{
-      flex:1,
-        justifyContent:'space-between',
+        flex:1,
     },
     backgroundList: {
-        height: screenHeight*0.8,
-        marginTop:screenHeight*0.1,
+        height: screenHeight*0.9,
         backgroundColor: 'white'
-
     },
 
     backgroundBottom: {
