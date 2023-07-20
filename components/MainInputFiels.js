@@ -17,7 +17,7 @@ function MainInputFields ({placeholder, setInputValue, value})
             textAlign = 'center'
             onChangeText={text => setInputValue(text)}
             value ={value}
-            caretHidden = {true}
+            caretHidden = {false}
             
             />
         </View>

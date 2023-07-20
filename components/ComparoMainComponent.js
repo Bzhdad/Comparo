@@ -65,7 +65,7 @@ const ComparoMainComponent = memo(function ComparoMainComponent({compareOption, 
                     autoCapitalize='characters'
                     maxLength={15}
                     textAlign = 'center'
-                    caretHidden = {true}
+                    caretHidden = {false}
                     />
                 </View>
             </View>
