@@ -1,12 +1,12 @@
+import React from 'react';
+import { Provider } from 'react-redux';
 import MainMenuScreen from './screens/MainMenuScreen';
-import {store} from "./store";
-import {Provider} from "react-redux";
+import { store } from './store';
 
 export default function App() {
   return (
-      <Provider store={store}>
-        <MainMenuScreen />
-      </Provider>
+    <Provider store={store}>
+      <MainMenuScreen />
+    </Provider>
   );
 }
-
