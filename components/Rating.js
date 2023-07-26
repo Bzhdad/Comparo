@@ -26,7 +26,6 @@ const Rating = memo(({ setRating }) => {
     { id: 2, value: 2, name: 'staro', size: 21, color: 'black'},
     { id: 3, value: 3, name: 'staro', size: 21, color: 'black' },
     { id: 4, value: 4, name: 'staro', size: 21, color: 'black'},
-    { id: 4, value: 4, name: 'staro', size: 21, color: 'black'},
     { id: 5, value: 5, name: 'staro', size: 21, color: 'black'},
   ]);
 
