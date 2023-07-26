@@ -30,12 +30,10 @@ function MainMenuScreen() {
   const [firstItem, setFirstItem] = useState('');
   const [secondItem, setSecondItem] = useState('');
   // Анимация кнопки
-  const buttonMarginTop = useSharedValue(screenHeight * 0.04);
   const buttonShake = useSharedValue(0);
   const textOpacity = useSharedValue(1);
   const reanimatedButtonStyle = useAnimatedStyle(
     () => ({
-      marginTop: buttonMarginTop.value,
       transform: [{ translateX: buttonShake.value }],
       opacity: textOpacity.value,
     }),
@@ -200,7 +198,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: 'black',
-    marginTop: StatusBar.currentHeight,
   },
 
   root: {
@@ -209,8 +206,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   mainButtonContainer: {
-    marginTop: 215,
-    alignSelf: 'center',
+    padding:10,
+    alignSelf: 'center'
+
   },
   textInputContainer: {
     overflow: 'hidden',
