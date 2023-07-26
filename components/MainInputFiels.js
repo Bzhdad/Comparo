@@ -14,6 +14,7 @@ function MainInputFields({ placeholder, setInputValue, value }) {
         onChangeText={(text) => setInputValue(text)}
         value={value}
         caretHidden={false}
+        selectionColor='white'
       />
     </View>
   );

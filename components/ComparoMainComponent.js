@@ -65,6 +65,7 @@ const ComparoMainComponent = memo(function ComparoMainComponent({
             maxLength={15}
             textAlign="center"
             caretHidden={false}
+            selectionColor='black'
           />
         </View>
       </View>
